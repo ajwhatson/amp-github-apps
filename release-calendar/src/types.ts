@@ -56,7 +56,8 @@ export class Promotion {
   date: Date;
 }
 
-export interface ApiService {
-  getRelease: (name: string) => Promise<Release>;
+export interface IApiService {
+  getRelease(name: string): Promise<Release>;
   getReleases: () => Promise<Release[]>;
+  getReleaseHistory: (name: string) => Promise<Release[]>;
 }

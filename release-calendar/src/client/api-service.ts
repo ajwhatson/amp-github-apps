@@ -20,14 +20,36 @@ import fetch from 'node-fetch';
 const SERVER_URL = `http://localhost:3000`;
 
 export class ApiService implements ApiService {
-  private getRequest(url: string): Promise<ReleaseEntity[]> {
+  private getRequestMany(url: string): Promise<ReleaseEntity[]> {
+    return fetch(url).then((result) => result.json());
+  }
+  private getRequestSingle(url: string): Promise<ReleaseEntity> {
     return fetch(url).then((result) => result.json());
   }
 
   async getReleases(): Promise<Release[]> {
-    const releases = await this.getRequest(SERVER_URL);
+    const releases = await this.getRequestMany(SERVER_URL);
     return releases.map((release: ReleaseEntity) => {
       return new Release(release);
     });
+  }
+
+  async getRelease(releaseName: string): Promise<Release[]> {
+    const release = await this.getRequestSingle(SERVER_URL + '/release/' + releaseName);
+    const history: Release[] = [];
+    for (let i = 0; i < release.promotions.length; i++) {
+      history.push(new Release(release, i));
+    }
+    return history;
+  }
+
+  async getReleaseHistory(release: string): Promise<Release[]> {
+    const releases = await this.getRequestMany(SERVER_URL);
+    const releaseEntity: ReleaseEntity = releases.find(search => (search.name === release));
+    const history: Release[] = [];
+    for (let i = 0; i < releaseEntity.promotions.length; i++) {
+      history.push(new Release(releaseEntity, i));
+    }
+    return history;
   }
 }

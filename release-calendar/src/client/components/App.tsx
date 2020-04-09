@@ -39,6 +39,8 @@ export class App extends React.Component<{}, AppState> {
     const releases = await this.apiService.getReleases();
     const events = getEvents(releases);
     this.setState({events});
+    const release = await this.apiService.getRelease('1234567890123');
+    console.log(getEvents(release));
   }
 
   render(): JSX.Element {

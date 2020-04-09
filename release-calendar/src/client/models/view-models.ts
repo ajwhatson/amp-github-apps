@@ -17,8 +17,8 @@
 import {Channel, Release as ReleaseEntity} from '../../types';
 
 export class Release {
-  constructor(entity: ReleaseEntity) {
-    const currentPromotion = entity.promotions[0];
+  constructor(entity: ReleaseEntity, whichPromotion: number = 0) {
+    const currentPromotion = entity.promotions[whichPromotion];
     this.name = entity.name;
     this.channel = currentPromotion.toChannel;
     this.date = currentPromotion.date;
@@ -30,3 +30,5 @@ export class Release {
   date: Date;
   isRollback: boolean;
 }
+
+
